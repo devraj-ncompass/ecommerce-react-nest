@@ -17,6 +17,6 @@ export const dbConfig: TypeOrmModuleAsyncOptions = {
         database: process.env.DB_NAME,
         entities: [Order,OrderItem, User, ShippingAddress, Product],
         synchronize: true,
-        logging: true
+        logging: false
     }),
 };
