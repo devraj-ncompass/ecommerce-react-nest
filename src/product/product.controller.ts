@@ -5,7 +5,7 @@ import { ApiResponse } from 'src/utils/response-handler';
 
 @Controller('product')
 export class ProductController {
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) { }
 
   @Get('get')
   async getProducts(@Query() query, @Res() res) {

@@ -28,16 +28,16 @@ export class User {
     @Column({ length: 200 })
     fullName: string;
 
-    @CreateDateColumn({name: 'created_at'})
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-    @UpdateDateColumn({name: 'updated_at'})
+    @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
     @OneToMany(() => ShippingAddress, (shippingAddress) => shippingAddress.user, { cascade: true })
     shippingAddresses: ShippingAddress[];
 
-    @OneToMany(() => Order, (order) => order.user, { cascade: true } )
+    @OneToMany(() => Order, (order) => order.user, { cascade: true })
     orders: Order[];
 
     @BeforeInsert()

@@ -8,8 +8,6 @@ import { ShippingAddress } from 'src/user/entity/shipping-address.entity';
 import { User } from 'src/user/entity/user.entity';
 import { OrderItem } from './order-item.entity';
 
-
-
 @Entity()
 export class Order {
     @PrimaryGeneratedColumn('uuid')

@@ -9,6 +9,7 @@ import {
     CreateDateColumn,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+
 import { User } from './user.entity';
 
 @Entity()
@@ -19,10 +20,10 @@ export class ShippingAddress {
     @Column('text')
     address: string;
 
-    @CreateDateColumn({name: 'created_at'})
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-    @UpdateDateColumn({name: 'updated_at'})
+    @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
     @ManyToOne(() => User, (user) => user.shippingAddresses)

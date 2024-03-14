@@ -17,15 +17,15 @@ import { createUserDto } from './dto/create-user.dto';
 @Controller('auth')
 export class AuthController {
     userService: any;
-    constructor(private authService: AuthService){}
+    constructor(private authService: AuthService) { }
 
     @Post('register')
     async createUser(
         @Body() createUserDto: createUserDto,
         @Res() res: Response,
         @Next() next: NextFunction
-    ){
-        try{
+    ) {
+        try {
             const createUserResponse = await this.authService.createUser(createUserDto)
             if (createUserResponse instanceof customError) {
                 throw createUserResponse;
@@ -36,7 +36,7 @@ export class AuthController {
                 createUserResponse,
                 res,
             );
-        } catch(error){
+        } catch (error) {
             next(error)
         }
     }
@@ -46,27 +46,27 @@ export class AuthController {
         @Body() body: { email: string; password: string },
         @Res() res: Response,
         @Next() next: NextFunction,
-    ){
-        try{
+    ) {
+        try {
             const user = await this.authService.validateUser(
                 body.email,
                 body.password,
-              );
+            );
             if (!user)
-              throw new customError(
-                HttpStatus.UNAUTHORIZED,
-                'Invalid credentials',
-                'User not found or invalid password',);
+                throw new customError(
+                    HttpStatus.UNAUTHORIZED,
+                    'Invalid credentials',
+                    'User not found or invalid password',);
 
             const tokenResponse = await this.authService.login(body.email, body.password);
             if (tokenResponse instanceof customError) {
                 throw tokenResponse
             }
             return new ApiResponse(HttpStatus.OK, 'Login successful', tokenResponse, res);
-        }catch(error){
+        } catch (error) {
             next(
                 error,
-              );
+            );
         }
     }
 }

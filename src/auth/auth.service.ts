@@ -17,18 +17,18 @@ export class AuthService {
     ) { }
     @InjectRepository(User) private userRepository: Repository<User>;
 
-    async createUser(createUserDto: createUserDto){
-        try{
-            const {email, password, fullName} = createUserDto
+    async createUser(createUserDto: createUserDto) {
+        try {
+            const { email, password, fullName } = createUserDto
             const existingUser = await this.userRepository.findOneBy({ email });
 
             if (existingUser) {
                 return 'User already exists!';
-              }
+            }
             const hashedPassword = crypto
-            .createHash('md5')
-            .update(password)
-            .digest('hex');
+                .createHash('md5')
+                .update(password)
+                .digest('hex');
 
             const newUser = this.userRepository.create({
                 email, password: hashedPassword, fullName
@@ -37,27 +37,27 @@ export class AuthService {
             const createNewUserResponse = this.userRepository.save(newUser);
             return createNewUserResponse;
         }
-        catch(error){
+        catch (error) {
             return new customError(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 'Some Error Occured',
                 error.message,
-              );
+            );
         }
     }
 
-    async validateUser(email: string, password: string){
-        try{
+    async validateUser(email: string, password: string) {
+        try {
             const user = await this.userRepository.findOne({ where: { email } });
             if (!user)
                 return new customError(
-                HttpStatus.UNAUTHORIZED,
-                'Invalid Credentials',
-                'User not found');
+                    HttpStatus.UNAUTHORIZED,
+                    'Invalid Credentials',
+                    'User not found');
             const hashedPassword = crypto
-            .createHash('md5')
-            .update(password)
-            .digest('hex');
+                .createHash('md5')
+                .update(password)
+                .digest('hex');
 
             const userCredential = await this.userRepository.findOne({
                 where: { id: user.id },
@@ -70,39 +70,37 @@ export class AuthService {
                     'Password mismatch',
                 );
             return user;
-        }catch(error){
+        } catch (error) {
             return new customError(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 'Some Error Occured',
                 error.message,
-              );
+            );
         }
     }
 
-    async login(email: string, password: string){
-        try{
+    async login(email: string, password: string) {
+        try {
             const validate = await this.validateUser(email, password);
             if (validate instanceof customError) {
                 return validate;
-              }
+            }
             const user = await this.userService.findOne(email);
             if (user instanceof customError) {
                 return user;
-              }
-            
-            const payload = { email: user.email};
-            
-             
+            }
+
+            const payload = { email: user.email, id: user.id };
 
             return {
                 access_token: this.jwtService.sign(payload),
-              };
-        }catch(error){
+            };
+        } catch (error) {
             return new customError(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 'Some Error Occured',
                 error.message,
-              );
+            );
         }
     }
 }
